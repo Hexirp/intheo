@@ -7,6 +7,20 @@ module Parser where
     fmap f x = i0 f x
      where
       i0 f (Parser x) = Parser (i1 f x)
-      i1 f x = \x0 -> i2 f (x x0)
-      i2 f x = case x of { [] -> []; xv : xs -> i3 f xv : i2 f xs }
-      i3 f x = case x of { (x0, x1) -> (f x0, x1) }
+      i1 f x = \s -> i2 f (x s)
+      i2 f x = case x of { [] -> []; xv : xs -> i3 f xv : i2 f xs; }
+      i3 f x = case x of { (v, s) -> (f v, s); }
+
+  instance Applicative Parser where
+    pure v = Parser (\s -> [(v, s)])
+
+    x0 <*> x1 = i0 x0 x1
+     where
+      i0 (Parser x0) (Parser x1) = Parser (i1 x0 x1)
+      i1 x0 x1 = \s -> i2 (x0 s) x1
+      i2 x0 x1 = case x0 of { [] -> []; x0v : x0s -> i3 x0v x1 (i2 x0s x1); }
+      i3 x0 x1 r = case x0 of { (v0, s0) -> i4 v0 s0 x1 r; }
+      i4 v0 s0 x1 r = i5 v0 (x1 s0) r
+      i5 v0 x1 r = case x1 of { [] -> r; x1v : x1s -> i6 v0 x1v : i5 v0 x1s r; }
+      i6 v0 x1 = case x1 of { (v1, s1) -> i7 v0 v1 s1; }
+      i7 v0 v1 s1 = (v0 v1, s1)

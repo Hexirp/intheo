@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6e61f5a98f07cfc24c5c111d6859d45cbc557564887e52a30af537a99a391b35
+-- hash: d4ba1b84c432e39212dc33ea182eebb1af847facf5962e4aac77cf2e0934aa40
 
 name:           intheo-parser-v0
 version:        0.0.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Parser
   other-modules:
       Paths_intheo_parser_v0
   hs-source-dirs:
