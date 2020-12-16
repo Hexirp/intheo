@@ -1,4 +1,4 @@
-module Parser where
+module Parser.Naive where
   import Prelude
 
   import Control.Applicative
