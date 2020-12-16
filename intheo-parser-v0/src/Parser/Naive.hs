@@ -53,7 +53,11 @@ module Parser.Naive where
   token = Parser (\s -> case s of { [] -> []; sv : ss -> [(sv, ss)]; })
 
   choice :: Ord t => [(t, a -> Parser a)] -> a -> Parser a
-  choice x z = i0 (sortOn (\x -> case x of (x0, x1) -> x0) x) z
+  choice x z = undefined {- i0 (sortOn (\x -> case x of (x0, x1) -> x0) x) z
    where
-    i0 x z = case x of { [] -> pure z; xv : xs -> do { z' <- i0 xs z; i1 xv z' }; }
-    i1 x z = case x of { (t, f) -> f z; }
+    i0 x z = Parser (i1 x z)
+    i1 x z s = case x of { [] -> []; xv : xs -> i2 xv z s (\z -> i1 xs z s); }
+    i2 x z s r = case x of { (t, f) -> i3 (f z) r; }
+    i3 (Parser x) s r = i4 x s r
+    i4 x s r = i5 (x s) r
+    i5 x = undefined -}
