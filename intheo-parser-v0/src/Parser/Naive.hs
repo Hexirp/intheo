@@ -4,6 +4,8 @@ module Parser.Naive where
   import Control.Applicative
   import Control.Monad
 
+  import Data.List
+
   newtype Parser a = Parser { runParser :: String -> [(a, String)] }
 
   instance Functor Parser where
@@ -49,3 +51,9 @@ module Parser.Naive where
 
   token :: Parser Char
   token = Parser (\s -> case s of { [] -> []; sv : ss -> [(sv, ss)]; })
+
+  choice :: Ord t => [(t, a -> Parser a)] -> a -> Parser a
+  choice x z = i0 (sortOn (\x -> case x of (x0, x1) -> x0) x) z
+   where
+    i0 x z = case x of { [] -> pure z; xv : xs -> do { z' <- i0 xs z; i1 xv z' }; }
+    i1 x z = case x of { (t, f) -> f z; }
