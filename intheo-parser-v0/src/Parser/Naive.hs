@@ -46,3 +46,6 @@ module Parser.Naive where
       i2 x0 x1 = case x0 of { [] -> x1; x0v : x0s -> x0v : i2 x0s x1; }
 
   instance MonadPlus Parser where
+
+  token :: Parser Char
+  token = Parser (\s -> case s of { [] -> []; sv : ss -> [(sv, ss)]; })
