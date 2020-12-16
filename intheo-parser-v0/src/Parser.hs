@@ -2,6 +2,7 @@ module Parser where
   import Prelude
 
   import Control.Applicative
+  import Control.Monad
 
   newtype Parser a = Parser { runParser :: String -> [(a, String)] }
 
@@ -43,3 +44,5 @@ module Parser where
       i0 (Parser x0) (Parser x1) = Parser (i1 x0 x1)
       i1 x0 x1 = \s -> i2 (x0 s) (x1 s)
       i2 x0 x1 = case x0 of { [] -> x1; x0v : x0s -> x0v : i2 x0s x1; }
+
+  instance MonadPlus Parser where
