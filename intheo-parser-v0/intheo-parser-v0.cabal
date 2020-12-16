@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d04f6ecbe5b656b7827637627bf65109aa54c90bd8d748bf8d312c19fc3c3b54
+-- hash: 6e61f5a98f07cfc24c5c111d6859d45cbc557564887e52a30af537a99a391b35
 
 name:           intheo-parser-v0
-version:        0.1.0.0
+version:        0.0.0.0
 description:    Please see the README on GitHub at <https://github.com/Hexirp/intheo-parser-v0#readme>
 homepage:       https://github.com/Hexirp/intheo-parser-v0#readme
 bug-reports:    https://github.com/Hexirp/intheo-parser-v0/issues
@@ -33,7 +33,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      base >=4.13.0.0 && <4.14
   default-language: Haskell2010
 
 executable intheo-parser-v0-exe
@@ -44,7 +44,7 @@ executable intheo-parser-v0-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      base >=4.13.0.0 && <4.14
     , intheo-parser-v0
   default-language: Haskell2010
 
@@ -57,6 +57,6 @@ test-suite intheo-parser-v0-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      base >=4.13.0.0 && <4.14
     , intheo-parser-v0
   default-language: Haskell2010
