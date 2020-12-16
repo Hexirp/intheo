@@ -1,6 +1,8 @@
 module Parser where
   import Prelude
 
+  import Control.Applicative
+
   newtype Parser a = Parser { runParser :: String -> [(a, String)] }
 
   instance Functor Parser where
@@ -32,3 +34,12 @@ module Parser where
       i3 x0 x1 r = case x0 of { (v0, s0) -> i4 s0 (x1 v0) r; }
       i4 s0 (Parser x1) r = i5 (x1 s0) r
       i5 x1 r = case x1 of { [] -> r; x1v : x1s -> x1v : i5 x1s r; }
+
+  instance Alternative Parser where
+    empty = Parser (\s -> [])
+
+    x0 <|> x1 = i0 x0 x1
+     where
+      i0 (Parser x0) (Parser x1) = Parser (i1 x0 x1)
+      i1 x0 x1 = \s -> i2 (x0 s) (x1 s)
+      i2 x0 x1 = case x0 of { [] -> x1; x0v : x0s -> x0v : i2 x0s x1; }
