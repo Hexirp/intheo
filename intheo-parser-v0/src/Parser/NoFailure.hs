@@ -55,3 +55,22 @@ module Parser.NoFailure where
       i4 x0p x0s x1 c = x1 x0s (\x1v x1p x1s -> i5 x0p x1v x1p x1s c)
       i5 :: forall r. p -> b -> p -> s -> (b -> p -> s -> m r) -> m r
       i5 x0p x1v x1p x1s c = c x1v (x0p <> x1p) x1s
+
+  instance (Monoid p, Alternative m) => Alternative (Parser p s m) where
+    empty :: forall p s m a. (Monoid p, Alternative m) => Parser p s m a
+    empty = i0
+     where
+      i0 :: Parser p s m a
+      i0 = Parser i1
+      i1 :: forall r. s -> (a -> p -> s -> m r) -> m r
+      i1 = \s c -> empty
+
+    (<|>) :: forall p s m a. (Monoid p, Alternative m) => Parser p s m a -> Parser p s m a -> Parser p s m a
+    x0 <|> x1 = i0 x0 x1
+     where
+      i0 :: Parser p s m a -> Parser p s m a -> Parser p s m a
+      i0 (Parser x0) (Parser x1) = Parser (i1 x0 x1)
+      i1 :: (forall r. s -> (a -> p -> s -> m r) -> m r) -> (forall r. s -> (a -> p -> s -> m r) -> m r) -> (forall r. s -> (a -> p -> s -> m r) -> m r)
+      i1 x0 x1 = \s c -> x0 s c <|> x1 s c
+
+  instance (Monoid p, Alternative m) => MonadPlus (Parser p s m) where
