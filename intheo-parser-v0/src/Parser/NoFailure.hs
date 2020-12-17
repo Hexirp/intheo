@@ -74,3 +74,26 @@ module Parser.NoFailure where
       i1 x0 x1 = \s c -> x0 s c <|> x1 s c
 
   instance (Monoid p, Alternative m) => MonadPlus (Parser p s m) where
+
+  try :: forall p s m a. Monoid p => Parser p s m a -> Parser p s m (a, p, s)
+  try x = i0 x
+   where
+    i0 :: Parser p s m a -> Parser p s m (a, p, s)
+    i0 (Parser x) = Parser (i1 x)
+    i1 :: (forall r. s -> (a -> p -> s -> m r) -> m r) -> (forall r. s -> ((a, p, s) -> p -> s -> m r) -> m r)
+    i1 x = \s c -> x s (\xv xp xs -> i2 xv xp xs s c)
+    i2 :: forall r. a -> p -> s -> s -> ((a, p, s) -> p -> s -> m r) -> m r
+    i2 xv xp xs s c = c (xv, xp, xs) mempty s
+
+  accept :: forall p s m a. (a, p, s) -> Parser p s m a
+  accept x = i0 x
+   where
+    i0 :: (a, p, s) -> Parser p s m a
+    i0 x = Parser (i1 x)
+    i1 :: (a, p, s) -> (forall r. s -> (a -> p -> s -> m r) -> m r)
+    i1 x = case x of { (xv, xp, xs) -> i2 xv xp xs; }
+    i2 :: a -> p -> s -> (forall r. s -> (a -> p -> s -> m r) -> m r)
+    i2 xv xp xs = \s c -> c xv xp xs
+
+  rollback :: forall p s m a. Monoid p => (a, p, s) -> Parser p s m ()
+  rollback x = pure ()
