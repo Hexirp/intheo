@@ -2,6 +2,10 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+-- https://fumieval.hatenablog.com/entry/2013/03/09/180504
+-- https://github.com/fumieval/mtl-c/blob/2eca50ba70e9919827bfe124e1200cc9c2af0532/Control/Monad/Writer/CPS.hs
+--
+-- 上記の二つを参考にした。
 module Parser.NoFailureReaderStrict where
   import Prelude
 

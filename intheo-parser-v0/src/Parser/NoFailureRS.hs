@@ -107,6 +107,6 @@ module Parser.NoFailureRS where
     x0 <- onHold x0
     x2 <- case x0 of
       (x0v, x0p, x0s) -> case x0v of
-        Left x0e -> x1 x0e
-        Right x0g -> accept (x0g, x0p, x0s)
+        Left x0a -> x1 x0a
+        Right x0b -> accept (x0b, x0p, x0s)
     return x2
