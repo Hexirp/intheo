@@ -75,8 +75,8 @@ module Parser.NoFailure where
 
   instance (Monoid p, Alternative m) => MonadPlus (Parser p s m) where
 
-  execute :: forall p s m a. Monoid p => Parser p s m a -> Parser p s m (a, p, s)
-  execute x = i0 x
+  onHold :: forall p s m a. Monoid p => Parser p s m a -> Parser p s m (a, p, s)
+  onHold x = i0 x
    where
     i0 :: Parser p s m a -> Parser p s m (a, p, s)
     i0 (Parser x) = Parser (i1 x)
@@ -100,6 +100,9 @@ module Parser.NoFailure where
 
   backtrack :: forall p s m e a. Monoid p => Parser p s m (Either e a) -> (e -> Parser p s m a) -> Parser p s m a
   backtrack x0 x1 = do
-    x0 <- execute x0
-    x2 <- case x0 of { (x0v, x0p, x0s) -> case x0v of { Left x0e -> x1 x0e; Right x0g -> accept (x0g, x0p, x0s); }; }
+    x0 <- onHold x0
+    x2 <- case x0 of
+      (x0v, x0p, x0s) -> case x0v of
+        Left x0e -> x1 x0e
+        Right x0g -> accept (x0g, x0p, x0s)
     return x2
